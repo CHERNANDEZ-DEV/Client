@@ -14,19 +14,19 @@ const AppRouter = () => {
     <>
         <Routes>
             <Route path='/' element={<Login/>}/>
-            <Route element={<ProtectedRoute canActivate={token} requiredRole={'ADMN'}/>}>
+            <Route element={<ProtectedRoute canActivate={!!token} requiredRole={'ADMN'}/>}>
                 <Route path='/admon/*' element={<AdmonRoutes/>}/>
             </Route>
-            <Route element={<ProtectedRoute canActivate={token} requiredRole={'RSDT'}/>}>
+            <Route element={<ProtectedRoute canActivate={!!token} requiredRole={'RSDT'}/>}>
                 <Route path='/resident/*' element={<ResidentRoutes/>}/>
             </Route>
-            <Route element={<ProtectedRoute canActivate={token} requiredRole={'RSNR'}/>}>
+            <Route element={<ProtectedRoute canActivate={!!token} requiredRole={'RSNR'}/>}>
                 <Route path='/normal/*' element={<NormalResidentRoutes/>}/>
             </Route>
-            <Route element={<ProtectedRoute canActivate={token} requiredRole={'VSTT'}/>}>
+            <Route element={<ProtectedRoute canActivate={!!token} requiredRole={'VSTT'}/>}>
                 <Route path='/visits/*' element={<VisitsRoutes/>}/>
             </Route>
-            <Route element={<ProtectedRoute canActivate={token} requiredRole={'GRDA'}/>}>
+            <Route element={<ProtectedRoute canActivate={!!token} requiredRole={'GRDA'}/>}>
                 <Route path='/security/*' element={<SecurityGuardRoutes/>}/>
             </Route>
         </Routes>

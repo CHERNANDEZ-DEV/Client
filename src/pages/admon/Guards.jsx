@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TableGuards from '../../components/TableGuards';
-import { assignGuardRole, getGuards, removeGuardRole } from '../../services/admon/guardService.js';
+import { getUserByEmail, assignGuardRole, getGuards, removeGuardRole } from '../../services/admon/guardService';
 import { usePopup } from "../../components/PopupContext";
 
-//ya completo
 const Guards = () => {
     const [guards, setGuards] = useState([]);
     const [email, setEmail] = useState('');
@@ -26,15 +25,16 @@ const Guards = () => {
     const handleAddGuard = async () => {
         if (email) {
             try {
+                const user = await getUserByEmail(email);
                 await assignGuardRole(email);
                 setEmail('');
                 fetchGuards();
                 showPopup("Guardia agregado exitosamente!", true);
             } catch (error) {
-                showPopup("Error : " + (error.response ? error.response.data : error.message), false);
+                showPopup("Error: " + (error.response ? error.response.data : error.message), false);
             }
         } else {
-            showPopup("Ingrese correo valido.", false);
+            showPopup("Ingrese correo válido.", false);
         }
     };
 
@@ -53,6 +53,9 @@ const Guards = () => {
         { Header: 'Nombre', accessor: 'username' },
         { Header: 'Correo electrónico', accessor: 'email' },
         { Header: 'Documento', accessor: 'dui' },
+        { Header: 'Acciones', accessor: 'actions', Cell: ({ row }) => (
+            <button onClick={() => handleRemoveRole(row.original.userId)}>Eliminar</button>
+        ) }
     ];
 
     return (
@@ -74,7 +77,6 @@ const Guards = () => {
                 >
                     Agregar
                 </button>
-                
             </div>
             <h1 className="text-2xl font-bold text-center text-azul-principal m-3 font-roboto_mono mt-5 mb-1">Lista de vigilantes</h1>
             <TableGuards

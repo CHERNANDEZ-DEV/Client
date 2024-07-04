@@ -1,18 +1,22 @@
-import { Navigate, Outlet } from "react-router-dom";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = ({ canActivate, requiredRole }) => {
-    const token = canActivate;
-    const role = localStorage.getItem('role');
+    const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('role');
 
-    if (!token) {
+    console.log('Verificando acceso con token:', token); // Añadir depuración
+    console.log('Verificando acceso con rol:', userRole); // Añadir depuración
+
+    if (!token || !userRole) {
         return <Navigate to="/" />;
     }
 
-    if (role !== requiredRole) {
+    if (requiredRole && userRole !== requiredRole) {
         return <Navigate to="/" />;
     }
 
-    return <Outlet />;
+    return canActivate ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

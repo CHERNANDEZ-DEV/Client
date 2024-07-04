@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Table from '../../components/Table';
 import { getResidentsByHome, changeUserRole } from '../../services/admon/homeService.js';
-//listo
+
 const GestionHogar = () => {
   const { houseNumber } = useParams();
   const [residents, setResidents] = useState([]);
@@ -23,7 +23,7 @@ const GestionHogar = () => {
 
   const handleRoleChange = async (userId, currentRole) => {
     let newRole;
-    switch (currentRole) {  //aqui le asignas el rol cuando le das en cambiar rol
+    switch (currentRole) {
       case 'RSNR':
         newRole = 'RSDT';
         break;

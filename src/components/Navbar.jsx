@@ -12,9 +12,10 @@ const Navbar = ({ menuItems }) => {
     const togglePicture = () => {
         setPictureAbierto(!pictureAbierto);
     };
+
     const toggleMenu = () => {
         setMenuAbierto(!menuAbierto);
-    }
+    };
 
     const navigate = useNavigate();
 
@@ -32,13 +33,14 @@ const Navbar = ({ menuItems }) => {
                 setUserEmail(user.email);
             }
         }
-        console.log("User image URL: ", user?.picture); //imagen del usuario
+        console.log("User image URL: ", user?.picture); // Verifica que la URL de la imagen del usuario se obtiene correctamente
     }, []);
 
     const logOut = () => {
         localStorage.removeItem("access_token");
         localStorage.removeItem("role");
         localStorage.removeItem("user");
+        localStorage.removeItem("picture");
         navigate('/');
     };
 
@@ -146,7 +148,7 @@ const Navbar = ({ menuItems }) => {
                                 <li key={index}>
                                     <a
                                         href={menuItem.url}
-                                        className=" text-xl block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                        className="text-xl block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                                     >
                                         {menuItem.label}
                                     </a>

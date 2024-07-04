@@ -1,14 +1,13 @@
-import axios from 'axios';
+import axiosInstance from '../api';
 import { getToken } from '../authService';
 
 const API_URL = 'http://localhost:8080/home';
 
-const assignUserToHome = async (identifier, numHome) => {   //asignar numero de casa
-    const token = getToken();
+export const assignUserToHome = async (identifier, numHome) => {
     try {
-        const response = await axios.post(`${API_URL}/assign`, null, {
+        const response = await axiosInstance.post(`${API_URL}/assign`, null, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${getToken()}`
             },
             params: { identifier, numHome }
         });
@@ -18,12 +17,11 @@ const assignUserToHome = async (identifier, numHome) => {   //asignar numero de 
     }
 };
 
-const getAllHomes = async () => {   //traer todos los hogares
-    const token = getToken();
+export const getAllHomes = async () => {
     try {
-        const response = await axios.get(`${API_URL}/list`, {
+        const response = await axiosInstance.get(`${API_URL}/list`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${getToken()}`
             }
         });
         return response.data;
@@ -32,14 +30,13 @@ const getAllHomes = async () => {   //traer todos los hogares
     }
 };
 
-const getResidentsByHome = async (numHome) => { //traer por numero de casa, todos los ue estan en esa casa
-    const token = getToken();
+export const getResidentsByHome = async (numHome) => {
     try {
-        const response = await axios.get(`${API_URL}/residents`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        params: { numHome }
+        const response = await axiosInstance.get(`${API_URL}/residents`, {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            },
+            params: { numHome }
         });
         return response.data;
     } catch (error) {
@@ -47,12 +44,11 @@ const getResidentsByHome = async (numHome) => { //traer por numero de casa, todo
     }
 };
 
-const changeUserRole = async (userId, newRole, numHome) => { //cambiar rol
-    const token = getToken();
+export const changeUserRole = async (userId, newRole, numHome) => {
     try {
-        const response = await axios.post(`${API_URL}/changeRole`, null, {
+        const response = await axiosInstance.post(`${API_URL}/changeRole`, null, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${getToken()}`
             },
             params: { userId, newRole, numHome }
         });
@@ -60,11 +56,4 @@ const changeUserRole = async (userId, newRole, numHome) => { //cambiar rol
     } catch (error) {
         throw error;
     }
-};
-
-export {
-    assignUserToHome,
-    getAllHomes,
-    getResidentsByHome,
-    changeUserRole
 };

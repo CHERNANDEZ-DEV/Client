@@ -3,7 +3,22 @@ import { getToken } from '../authService';
 
 const API_URL = 'http://localhost:8080/api/guards';
 
-const assignGuardRole = async (email) => {  //en la vista solo de asignar
+const getUserByEmail = async (email) => {
+    const token = getToken();
+    try {
+        const response = await axios.get(`${API_URL}/user`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            params: { email }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const assignGuardRole = async (email) => {
     const token = getToken();
     try {
         const response = await axios.post(`${API_URL}/assign`, null, {
@@ -18,7 +33,7 @@ const assignGuardRole = async (email) => {  //en la vista solo de asignar
     }
 };
 
-const getGuards = async () => {     //listar guardias
+const getGuards = async () => {
     const token = getToken();
     try {
         const response = await axios.get(`${API_URL}/list`, {
@@ -32,7 +47,7 @@ const getGuards = async () => {     //listar guardias
     }
 };
 
-const removeGuardRole = async (userId) => { //reasignar rol, de residente a visitante
+const removeGuardRole = async (userId) => {
     const token = getToken();
     try {
         const response = await axios.post(`${API_URL}/remove`, null, {
@@ -48,6 +63,7 @@ const removeGuardRole = async (userId) => { //reasignar rol, de residente a visi
 };
 
 export {
+    getUserByEmail,
     assignGuardRole,
     getGuards,
     removeGuardRole

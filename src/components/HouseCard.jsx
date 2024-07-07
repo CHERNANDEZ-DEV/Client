@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const HouseCard = ({ houseNumber, representative }) => {
+const HouseCard = ({ houseNumber, representative, onGestionClick }) => {
   const navigate = useNavigate();
 
   const handleGestionClick = () => {

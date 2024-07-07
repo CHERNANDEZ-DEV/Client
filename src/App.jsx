@@ -11,6 +11,7 @@ const App = () => {
         <PopupProvider>
           <AppRouter/>
         </PopupProvider>
+        
       
     </>
   );

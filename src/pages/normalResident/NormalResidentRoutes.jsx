@@ -11,7 +11,8 @@ const NormalResidentRoutes = () => {
     const adminMenuItems = [
         { label: 'Mi perfil', url: 'perfil' },
         { label: 'Solicitud de visita', url: 'solicitud'},
-        { label: 'Generar QR', url: 'generar-qr'}
+        { label: 'Generar QR', url: 'generar-qr'},
+        
 
     ];
 

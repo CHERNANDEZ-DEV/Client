@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { getUserRoleCode } from '../services/userService';
+import React, { useState, useEffect } from 'react';
+import { getUserRole } from '../../services/userService';
 
 const UserRoleComponent = () => {
-    const [roleCode, setRoleCode] = useState('');
+    const [roles, setRoles] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchRoleCode = async () => {
+        const fetchUserRole = async () => {
             try {
-                const roleCode = await getUserRoleCode();
-                setRoleCode(roleCode);
+                const roleData = await getUserRole();
+                setRoles(roleData);
             } catch (error) {
-                setError('Error fetching role code');
+                setError('Error fetching user roles');
             }
         };
 
-        fetchRoleCode();
+        fetchUserRole();
     }, []);
 
     return (
         <div>
-            <h1>User Role Code</h1>
+            <h1>Roles del Usuario</h1>
             {error && <p>{error}</p>}
-            <p>{roleCode}</p>
+            <ul>
+                {roles.map((role, index) => (
+                    <li key={index}>{role.role}</li>
+                ))}
+            </ul>
         </div>
     );
 };

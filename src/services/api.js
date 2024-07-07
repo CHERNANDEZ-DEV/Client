@@ -4,20 +4,24 @@ import { getToken } from './authService';
 const API_URL = 'http://localhost:8080';
 
 const axiosInstance = axios.create({
-    baseURL: API_URL,
+  baseURL: API_URL,
+  headers: {
+    'Authorization': `Bearer ${getToken()}`
+  }
 });
 
+// Interceptor para actualizar el token en cada solicitud
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = getToken();
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  config => {
+    const token = getToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;

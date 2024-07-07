@@ -1,33 +1,29 @@
-import React, { createContext, useState, useContext, useCallback } from 'react';
-import Popup from './PopUpMessage';
+import React, { createContext, useState, useContext } from 'react';
 
 const PopupContext = createContext();
 
-export const usePopup = () => useContext(PopupContext);
+export const usePopup = () => {
+  return useContext(PopupContext);
+};
 
 export const PopupProvider = ({ children }) => {
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
-  const [popupType, setPopupType] = useState('');
+  const [popup, setPopup] = useState({ message: '', success: false });
 
-  const showPopup = useCallback((message, type) => {
-    setPopupMessage(message);
-    setPopupType(type);
-    setIsPopupVisible(true);
+  const showPopup = (message, success) => {
+    setPopup({ message, success });
     setTimeout(() => {
-      setIsPopupVisible(false);
-    }, 3000); // Ajustar el tiempo si se necesita cambiar
-  }, []);
+      setPopup({ message: '', success: false });
+    }, 3000);
+  };
 
   return (
-    <PopupContext.Provider value={{ showPopup }}>
+    <PopupContext.Provider value={{ popup, showPopup }}>
       {children}
-      <Popup 
-        message={popupMessage} 
-        isVisible={isPopupVisible} 
-        type={popupType}
-        onClose={() => setIsPopupVisible(false)} 
-      />
+      {popup.message && (
+        <div className={`popup ${popup.success ? 'popup-success' : 'popup-error'}`}>
+          {popup.message}
+        </div>
+      )}
     </PopupContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TableGuards from '../../components/TableGuards';
-import { getUserByEmail, assignGuardRole, getGuards, removeGuardRole } from '../../services/admon/guardService';
+import { assignGuardRole, getGuards, removeGuardRole } from '../../services/admon/guardService';
 import { usePopup } from "../../components/PopupContext";
 
 const Guards = () => {
@@ -15,7 +15,7 @@ const Guards = () => {
     const fetchGuards = async () => {
         try {
             const data = await getGuards();
-            setGuards(Array.isArray(data) ? data : []);
+            setGuards(data);
         } catch (error) {
             console.error("Error fetching guards:", error);
             setGuards([]);
@@ -25,11 +25,14 @@ const Guards = () => {
     const handleAddGuard = async () => {
         if (email) {
             try {
-                const user = await getUserByEmail(email);
-                await assignGuardRole(email);
+                const result = await assignGuardRole(email);
+                if (result === "Guardia ya asignado") {
+                    showPopup("Usuario ya asignado como guardia.", true);
+                } else {
+                    fetchGuards();
+                    showPopup("Guardia registrado exitosamente!", true);
+                }
                 setEmail('');
-                fetchGuards();
-                showPopup("Guardia agregado exitosamente!", true);
             } catch (error) {
                 showPopup("Error: " + (error.response ? error.response.data : error.message), false);
             }
@@ -42,10 +45,10 @@ const Guards = () => {
         try {
             await removeGuardRole(userId);
             fetchGuards();
-            showPopup("Rol retirado exitosamente!", true);
+            showPopup("Guardia removido exitosamente!", true);
         } catch (error) {
             console.error("Error removing guard role:", error);
-            showPopup("Error removing guard role: " + (error.response ? error.response.data : error.message), "error");
+            showPopup("Error: " + (error.response ? error.response.data : error.message), false);
         }
     };
 
@@ -53,9 +56,17 @@ const Guards = () => {
         { Header: 'Nombre', accessor: 'username' },
         { Header: 'Correo electrónico', accessor: 'email' },
         { Header: 'Documento', accessor: 'dui' },
-        { Header: 'Acciones', accessor: 'actions', Cell: ({ row }) => (
-            <button onClick={() => handleRemoveRole(row.original.userId)}>Eliminar</button>
-        ) }
+        {
+            Header: 'Acciones',
+            Cell: ({ row }) => (
+                <button
+                    className="bg-red-300 py-1 px-3 rounded-md font-roboto_mono"
+                    onClick={() => handleRemoveRole(row.original.userId)}
+                >
+                    Quitar rol
+                </button>
+            )
+        }
     ];
 
     return (

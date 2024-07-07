@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Table from '../../components/Table';
-import { getResidentsByHome, changeUserRole } from '../../services/admon/homeService.js';
+import { getResidentsByHome, changeUserRole } from '../../services/homeService';
 
 const GestionHogar = () => {
   const { houseNumber } = useParams();
@@ -14,7 +14,8 @@ const GestionHogar = () => {
   const fetchResidents = async () => {
     try {
       const data = await getResidentsByHome(houseNumber);
-      setResidents(Array.isArray(data) ? data : []);
+      const filteredResidents = data.filter(resident => resident.role === 'RSDT' || resident.role === 'RSNR');
+      setResidents(Array.isArray(filteredResidents) ? filteredResidents : []);
     } catch (error) {
       console.error("Error fetching residents:", error);
       setResidents([]);

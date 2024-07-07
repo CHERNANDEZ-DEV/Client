@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Table = ({ columnas, datos, handleRoleChange }) => {
+const Table = ({ columnas, datos }) => {
   return (
     <div className='w-full h-full mt-6 mr-6 ml-auto pl-5 pr-5'>
       <div className='m-6 flex justify-center'>

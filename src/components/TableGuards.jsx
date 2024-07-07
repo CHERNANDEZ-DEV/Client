@@ -14,7 +14,7 @@ const TableGuards = ({ columnas, datos, handleEliminar }) => {
                             <th className="px-4 py-2 text-center border border-gray-500">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody className='text-center  bg-gray-100 border-stone-500 font-roboto_mono'>
+                    <tbody className='text-center bg-gray-100 border-stone-500 font-roboto_mono'>
                         {datos.map((dato, index) => (
                             <tr key={index} className="hover:bg-gray-100 border-black">
                                 {columnas.map(columna => (
@@ -22,7 +22,7 @@ const TableGuards = ({ columnas, datos, handleEliminar }) => {
                                 ))}
                                 <td className="border px-4 py-2 border-gray-500">
                                     <button
-                                        onClick={() => handleEliminar(dato.code)}
+                                        onClick={() => handleEliminar(dato.userId)}
                                         className="bg-red-300 py-1 px-3 rounded-md font-roboto_mono"
                                     >
                                         Quitar rol

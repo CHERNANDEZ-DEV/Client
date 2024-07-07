@@ -1,15 +1,10 @@
-import axios from 'axios';
-import { getToken } from '../authService';
+import axiosInstance from '../api';
 
-const API_URL = 'http://localhost:8080/api/guards';
+const API_URL = '/api/guards';
 
-const getUserByEmail = async (email) => {
-    const token = getToken();
+export const assignGuardRole = async (email) => {
     try {
-        const response = await axios.get(`${API_URL}/user`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+        const response = await axiosInstance.post(`${API_URL}/assign`, null, {
             params: { email }
         });
         return response.data;
@@ -18,53 +13,35 @@ const getUserByEmail = async (email) => {
     }
 };
 
-const assignGuardRole = async (email) => {
-    const token = getToken();
+export const getGuards = async () => {     
     try {
-        const response = await axios.post(`${API_URL}/assign`, null, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            params: { email }
-        });
-        return response.data;
+        const response = await axiosInstance.get(`${API_URL}/list`);
+        const guards = response.data;
+
+        // Verificar que guards es un array y tiene datos antes de intentar filtrar
+        if (Array.isArray(guards)) {
+            const guardsWithRole = guards.filter(guard => {
+                // Verificar que roles es un array antes de intentar usar some
+                return Array.isArray(guard.roles) && guard.roles.some(role => role === 'Guardia');
+            });
+
+            return guardsWithRole;
+        }
+
+        // Si guards no es un array, devolver un array vacío
+        return [];
     } catch (error) {
         throw error;
     }
 };
 
-const getGuards = async () => {
-    const token = getToken();
+export const removeGuardRole = async (userId) => { 
     try {
-        const response = await axios.get(`${API_URL}/list`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
-const removeGuardRole = async (userId) => {
-    const token = getToken();
-    try {
-        const response = await axios.post(`${API_URL}/remove`, null, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+        const response = await axiosInstance.post(`${API_URL}/remove`, null, {
             params: { userId }
         });
         return response.data;
     } catch (error) {
         throw error;
     }
-};
-
-export {
-    getUserByEmail,
-    assignGuardRole,
-    getGuards,
-    removeGuardRole
 };

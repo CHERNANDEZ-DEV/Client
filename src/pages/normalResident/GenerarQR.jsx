@@ -5,8 +5,7 @@ const GenerarQR = () => {
 
     return (
       <div>
-        <div className="flex pt-10 items-center min-h-screen flex-col  w-full " >
-          <h1 className='text-4xl text-[#6185A9] text-center mt-2 mb-2'>Qr de entrada</h1>
+        <div className="flex pt-10 flex-col" >
           <QrEntry />
         </div>
       </div>

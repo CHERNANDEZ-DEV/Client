@@ -61,7 +61,7 @@ const Guards = () => {
             Cell: ({ row }) => (
                 <button
                     className="bg-red-300 py-1 px-3 rounded-md font-roboto_mono"
-                    onClick={() => handleRemoveRole(row.original.userId)}
+                    onClick={() => handleRemoveRole(row.original.code)} // Aquí nos aseguramos de pasar el UUID correcto
                 >
                     Quitar rol
                 </button>

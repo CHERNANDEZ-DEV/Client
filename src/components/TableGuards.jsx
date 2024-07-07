@@ -22,7 +22,10 @@ const TableGuards = ({ columnas, datos, handleEliminar }) => {
                                 ))}
                                 <td className="border px-4 py-2 border-gray-500">
                                     <button
-                                        onClick={() => handleEliminar(dato.userId)}
+                                        onClick={() => {
+                                            console.log(`Removing guard with ID: ${dato.code}`); // Verifica que `dato.code` es el UUID correcto
+                                            handleEliminar(dato.code);
+                                        }}
                                         className="bg-red-300 py-1 px-3 rounded-md font-roboto_mono"
                                     >
                                         Quitar rol

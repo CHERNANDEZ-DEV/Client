@@ -13,23 +13,10 @@ export const assignGuardRole = async (email) => {
     }
 };
 
-export const getGuards = async () => {     
+export const getGuards = async () => {
     try {
         const response = await axiosInstance.get(`${API_URL}/list`);
-        const guards = response.data;
-
-        // Verificar que guards es un array y tiene datos antes de intentar filtrar
-        if (Array.isArray(guards)) {
-            const guardsWithRole = guards.filter(guard => {
-                // Verificar que roles es un array antes de intentar usar some
-                return Array.isArray(guard.roles) && guard.roles.some(role => role === 'Guardia');
-            });
-
-            return guardsWithRole;
-        }
-
-        // Si guards no es un array, devolver un array vacío
-        return [];
+        return response.data;
     } catch (error) {
         throw error;
     }
@@ -45,3 +32,12 @@ export const removeGuardRole = async (userId) => {
         throw error;
     }
 };
+
+export const getUserProfile = async () => {
+    try {
+      const response = await axiosInstance.get('/user/profile');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };

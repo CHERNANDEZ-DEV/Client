@@ -50,16 +50,16 @@ const registerUser = async (registerInfo) => {
 
 const loginUser = async (loginInfo) => {
   try {
-      const response = await axios.post(`${API_URL}/login`, loginInfo);
-      if (response.data.token) {
-          setToken(response.data.token);
-          localStorage.setItem('role', response.data.role || 'VSTT');
-          localStorage.setItem('picture', response.data.picture);
-          localStorage.setItem('houseNumber', response.data.houseNumber);
-      }
-      return response.data;
+    const response = await axios.post(`${API_URL}/login`, loginInfo);
+    if (response.data.token) {
+      setToken(response.data.token);
+      localStorage.setItem('role', response.data.role);
+      localStorage.setItem('picture', response.data.picture);
+      localStorage.setItem('houseNumber', response.data.houseNumber);
+    }
+    return response.data;
   } catch (error) {
-      throw error;
+    throw error;
   }
 };
 

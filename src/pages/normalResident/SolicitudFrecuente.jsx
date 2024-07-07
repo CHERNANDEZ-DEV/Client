@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePopup } from "../../components/PopupContext";
 import { sendMultipleInvitation } from "../../services/ResidenteNormal/invitationService";
+import axios from 'axios';
 
 const SolicitudFrecuente = () => {
     const { showPopup } = usePopup();
-
     const [formValues, setFormValues] = useState({
         email: '',
         date1: '',
@@ -12,6 +12,33 @@ const SolicitudFrecuente = () => {
         time1: '',
         time2: ''
     });
+    const [home, setHome] = useState(null);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const profileResponse = await axios.get('http://localhost:8080/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                    },
+                });
+
+                const userHome = profileResponse.data.home;
+                if (userHome) {
+                    setHome(userHome);
+                    localStorage.setItem('houseNumber', userHome);  // Guardar el número de casa en localStorage
+                } else {
+                    throw new Error('User home not found');
+                }
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+                setError('Error al cargar el perfil del usuario. Inténtalo de nuevo más tarde.');
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,6 +78,9 @@ const SolicitudFrecuente = () => {
         <div className="flex items-center h-screen flex-col w-full font-roboto_mono">
             <h1 className="text-2xl text-[#6185A9] text-center m-2">Detalles de la solicitud</h1>
             <h2 className="text-center text-xl text-[#6185A9] pb-2">Acceso Frecuente</h2>
+            {error && (
+                <p className="text-red-600 mb-4">{error}</p>
+            )}
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
                 <div className="flex flex-col mt-4 mb-4">
                     <label className="text-lg mb-2">Correo electrónico:</label>

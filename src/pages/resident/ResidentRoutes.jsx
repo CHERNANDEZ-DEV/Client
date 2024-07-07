@@ -8,7 +8,7 @@ import PerfilCard from './PerfilCard';
 import AddResidents from './AddResidents';
 import ViewVisits from './ViewVisits';
 import Entries from './Entries';
-import SolicitudesVisit from './SolicitudesVisit';
+import SolicitudesVisit from './Approve';
 
 const ResidentRoutes = () => {
     const adminMenuItems = [

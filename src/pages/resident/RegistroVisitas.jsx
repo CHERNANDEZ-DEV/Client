@@ -24,7 +24,7 @@ const RegistroVisitas = () => {
     <div className='w-full h-full mt-6 mr-6 ml-6'> {/* Contenedor con tamaño máximo */}
 
       <div className='m-6 flex justify-center'>
-        <h1 className='font-bold text-2xl'>Registro de visitas </h1>
+        <h1 className='mt-5 text-2xl text-[#6185A9] text-center font-bold mb-10 font-roboto_mono'>Registro de visitas </h1>
       </div>
 
       {/* Filtro */}

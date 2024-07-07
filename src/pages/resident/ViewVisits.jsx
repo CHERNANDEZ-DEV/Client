@@ -1,122 +1,140 @@
 // src/pages/ViewVisits.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import VisitCard from '../../components/VisitCard';
+import { motion } from 'framer-motion';
 
 const ViewVisits = () => {
-    const [visits] = useState([
-        { id: 1, nombre: 'Carlos Sosa', fecha: '2024-11-24', hora: '11:20 AM' },
-        { id: 2, nombre: 'María Perez', fecha: '2024-11-20', hora: '02:30 PM' },
-        { id: 2, nombre: 'María Perez', fecha: '2024-11-20', hora: '02:30 PM' },
-        { id: 2, nombre: 'María Perez', fecha: '2024-11-20', hora: '02:30 PM' },
-        { id: 2, nombre: 'María Perez', fecha: '2024-11-20', hora: '02:30 PM' },
+  const [visits, setVisits] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [error, setError] = useState('');
+  const [numHome, setNumHome] = useState('');
 
-
-        // Agregar más datos de visita según sea necesario
-    ]);
-    const [filtro, setFiltro] = useState('');
-    const [selectedFilter, setSelectedFilter] = useState('all');
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    const handleFiltroChange = (event) => {
-        setFiltro(event.target.value);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get('http://localhost:8080/user/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log(response.data); // Mostrar los datos de perfil en la consola
+        setNumHome(response.data.home);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        setError('Error al cargar el perfil del usuario. Inténtalo de nuevo más tarde.');
+      }
     };
 
-    const handleFilterChange = (filterType) => {
-        setSelectedFilter(filterType);
-        setMenuOpen(false); // Cierra el menú después de seleccionar una opción
-    };
+    fetchUserProfile();
+  }, []);
 
-    const applyFilter = () => {
-        const currentDate = new Date();
-        let filteredVisits = visits;
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
 
-        switch (selectedFilter) {
-            case 'last10':
-                const tenDaysAgo = new Date();
-                tenDaysAgo.setDate(currentDate.getDate() - 10);
-                filteredVisits = visits.filter(visit => new Date(visit.fecha) >= tenDaysAgo);
-                break;
-            case 'month':
-                const currentMonth = new Date().getMonth();
-                filteredVisits = visits.filter(visit => new Date(visit.fecha).getMonth() === currentMonth);
-                break;
-            case 'name':
-                filteredVisits = visits.filter(visit =>
-                    visit.nombre.toLowerCase().includes(filtro.toLowerCase())
-                );
-                break;
-            default:
-                filteredVisits = visits;
-                break;
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
+  const fetchVisits = async () => {
+    if (!startDate || !endDate) {
+      setError('Por favor, seleccione ambas fechas.');
+      return;
+    }
+
+    if (!numHome) {
+      setError('Error al obtener el número de casa. Inténtalo de nuevo más tarde.');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.post('http://localhost:8080/entry/by-home', {
+        home: numHome,
+        from: `${startDate}T00:00:00`,
+        to: `${endDate}T00:00:00`
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
+      });
 
-        return filteredVisits;
-    };
+      console.log(response.data); // Mostrar en la consola los datos recibidos de la API
 
-    const filteredVisits = applyFilter();
+      setVisits(response.data.details);
+      setError('');
+    } catch (error) {
+      console.error('Error fetching visits:', error);
+      setError('Error al cargar las visitas. Inténtalo de nuevo más tarde.');
+    }
+  };
 
-    return (
-        <div className='flex items-center flex-col w-full font-roboto_mono'>
-            <h1 className="text-2xl text-[#6185A9] text-center mt-4">Registro de visitas</h1>
-            <div className="flex flex-col sm:flex-row justify-center items-center w-full mt-4">
-                <h2 className="text-xl text-[#6185A9] text-center">Últimas visitas registradas</h2>
-                <div className="relative ml-4 sm:ml-10">
-                    <button
-                        type="button"
-                        className="bg-amarillo-principal text-black py-1 px-4 rounded-md text-sm font-roboto_mono"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                    >
-                        Filtrar resultados
-                    </button>
-                    {menuOpen && (
-                        <div className="absolute right-0 mt-2 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg">
-                            <div className="py-1">
-                                <button
-                                    onClick={() => handleFilterChange('last10')}
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                >
-                                    Últimos 10 días
-                                </button>
-                                <button
-                                    onClick={() => handleFilterChange('month')}
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                >
-                                    Mes actual
-                                </button>
-                                <button
-                                    onClick={() => handleFilterChange('name')}
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                >
-                                    Por nombre
-                                </button>
-                                <input
-                                    type="text"
-                                    placeholder="Buscar nombre"
-                                    value={filtro}
-                                    onChange={handleFiltroChange}
-                                    className="block px-4 py-2 text-sm text-gray-700 w-full text-left"
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div className="mt-7 overflow-y-auto h-96 mb-8">
-                {filteredVisits.length > 0 ? (
-                    filteredVisits.map((visit) => (
-                        <VisitCard
-                            key={visit.id}
-                            nombre={visit.nombre}
-                            fecha={visit.fecha}
-                            hora={visit.hora}
-                        />
-                    ))
-                ) : (
-                    <p className="text-gray-700 mt-4">No se encontraron resultados.</p>
-                )}
-            </div>
+  return (
+    <div className='flex items-center flex-col w-full font-roboto_mono'>
+      <h1 className="text-2xl text-[#6185A9] text-center mt-4 font-roboto_mono font-bold">Registro de visitas</h1>
+      <div className="flex flex-col sm:flex-row justify-center items-center w-full mt-4">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-center">
+            <label htmlFor="startDate" className="text-gray-700 mb-2">Desde</label>
+            <input
+              id="startDate"
+              type="date"
+              value={startDate}
+              onChange={handleStartDateChange}
+              className="p-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <label htmlFor="endDate" className="text-gray-700 mb-2">Hasta</label>
+            <input
+              id="endDate"
+              type="date"
+              value={endDate}
+              onChange={handleEndDateChange}
+              className="p-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <button
+            onClick={fetchVisits}
+            className="bg-amarillo-principal text-black py-1 px-4 rounded-md text-sm font-roboto_mono mt-4 hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+          >
+            Buscar
+          </button>
         </div>
-    );
+      </div>
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      <div className="mt-7 overflow-y-auto h-96 mb-8 w-full px-4 sm:px-0">
+        {visits.length > 0 ? (
+          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ${visits.length === 1 ? 'justify-center' : ''}`}>
+            {visits.map((visit, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <VisitCard
+                  email={visit.userEmail}
+                  fecha={new Date(visit.date).toLocaleDateString()}
+                  hora={new Date(visit.date).toLocaleTimeString()}
+                />
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-700 mt-4 text-center">No se encontraron resultados</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default ViewVisits;
+
+
+
+
+

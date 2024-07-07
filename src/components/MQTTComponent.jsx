@@ -2,53 +2,51 @@ import React, { useEffect, useState } from 'react';
 import mqtt from 'mqtt';
 
 const MQTTComponent = () => {
-  const [messages, setMessages] = useState([]);
   const [client, setClient] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const mqttClient = mqtt.connect('ws://157.230.230.162:8883'); // Cambia esto a tu dirección IP y puerto
+    // Configurar la conexión al servidor MQTT
+    const client = mqtt.connect('ws://157.230.230.162:9001');
 
-    mqttClient.on('connect', () => {
-      console.log('Conectado a MQTT Broker');
-      mqttClient.subscribe('prueba', (err) => {
+    // Evento cuando la conexión es exitosa
+    client.on('connect', () => {
+      console.log('Conectado al servidor MQTT');
+      setIsConnected(true);
+
+      // Suscribirse a un tema
+      client.subscribe('prueba', (err) => {
         if (!err) {
-          console.log('Suscrito al topic');
+          console.log('Suscrito al tema');
         }
       });
     });
 
-    mqttClient.on('message', (topic, message) => {
-      console.log(`Mensaje recibido: ${message.toString()}`);
-      setMessages((prevMessages) => [...prevMessages, message.toString()]);
+    // Evento cuando llega un mensaje
+    client.on('message', (topic, message) => {
+      console.log(`Mensaje recibido del tema ${topic}: ${message.toString()}`);
+      setMessage(message.toString());
     });
 
-    setClient(mqttClient);
+    // Guardar el cliente en el estado
+    setClient(client);
 
-    // Cleanup
+    // Limpiar la conexión cuando el componente se desmonte
     return () => {
-      mqttClient.end();
+      if (client) {
+        client.end();
+      }
     };
   }, []);
 
-  const sendOpenMessage = () => {
-    if (client) {
-      client.publish('tu/topic', 'open');
-      console.log('Mensaje enviado: open');
-    }
-  };
-
   return (
     <div>
-      <h1>Mensajes MQTT</h1>
-      <ul>
-        {messages.map((msg, index) => (
-          <li key={index}>{msg}</li>
-        ))}
-      </ul>
-      <button onClick={sendOpenMessage}>Enviar Mensaje 'open'</button>
+      <h1>MQTT en React</h1>
+      <p>{isConnected ? 'Conectado' : 'Desconectado'}</p>
+      <p>Mensaje recibido: {message}</p>
     </div>
   );
 };
 
 export default MQTTComponent;
-

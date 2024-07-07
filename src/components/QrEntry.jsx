@@ -1,66 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
-
-const token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDYXJsb3MgQWxiZXJ0byBIZXJuw6FuZGV6IEd1ZXJyYSIsImlhdCI6MTcxODU5ODc4OCwiZXhwIjoxNzE5ODk0Nzg4fQ.MeuFhh2quofoDYGR1RD6ENCZHoNPUg4XQb2rN8Xpvc-ECLHhPI2d0XySoHrEFW-P";
+import { motion } from 'framer-motion';
+import { ClipLoader } from 'react-spinners';
+import { useMediaQuery } from 'react-responsive';
 
 const QrEntry = () => {
-
-  const initialTime = 15;
-  const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [qrString, setQrString] = useState('');
+  const [userData, setUserData] = useState({ email: '', home: '' });
+  const [qrLoaded, setQrLoaded] = useState(false); // Estado para controlar si el QR se ha cargado
+
+  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
 
   const fetchQrString = async () => {
+    const token = localStorage.getItem('access_token'); // Obtener el token del localStorage
+
+    if (!token) {
+      console.error('Token no encontrado');
+      return;
+    }
+
     try {
-      const response = await axios.get('http://localhost:8080/qr/generate', {
+      const response = await axios.get('http://localhost:8080/qr/general/generate', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
       console.log('QR string:', response.data);
       setQrString(response.data);
+      setQrLoaded(true); // Marcar que el QR se ha cargado correctamente
     } catch (error) {
       console.error('Error fetching QR string:', error);
+      setQrLoaded(false); // Marcar que hubo un error al cargar el QR
     }
   };
 
-  useEffect(() => {
-    fetchQrString(); // Initial fetch
-  }, []);
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('access_token'); // Obtener el token del localStorage
 
-  useEffect(() => {
-    if (timeRemaining <= 0) {
-      setTimeRemaining(initialTime);
-      fetchQrString(); // Fetch new QR string when timer resets
+    if (!token) {
+      console.error('Token no encontrado');
       return;
     }
 
-    const timerId = setInterval(() => {
-      setTimeRemaining((prevTime) => prevTime - 1);
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [timeRemaining]);
-
-  const formatTime = (time) => {
-    const minutes = String(Math.floor(time / 60)).padStart(2, '0');
-    const seconds = String(time % 60).padStart(2, '0');
-    return `${minutes}:${seconds}`;
+    try {
+      const response = await axios.get('http://localhost:8080/user/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('User data:', response.data);
+      setUserData({ email: response.data.email, home: response.data.home });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
   };
 
+  useEffect(() => {
+    fetchQrString();
+    fetchUserData();
+  }, []); // Dependencias vacías aseguran que se ejecuta solo una vez
+
   return (
-    <div className='bg-[#D9D9D9] bg-opacity-52 p-2 rounded-md flex flex-col justify-center items-center m-2 w-auto font-roboto_mono'>
-
-        <div className="bg-white p-4 m-1">
-          <QRCode value={qrString} size={175} />
-        </div>
-
-        <p className='text-2xl mt-4 mb-1'>{formatTime(timeRemaining)}</p>
-        <p className='text-2xl text-center m-1'>Pedro Orellana</p>
-        <p className='text-2xl text-center m-1'>Residente</p>
+    <div className='flex flex-col justify-center items-center h-screen'>
+      {qrLoaded ? (
+        <motion.div 
+          className='bg-white rounded-lg flex flex-col justify-center items-center'
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className=""
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <QRCode value={qrString} size={isDesktopOrLaptop ? 300 : 175} />
+          </motion.div>
+          <p className='text-2xl text-center m-1 font-bold mt-10'>{userData.email}</p>
+          <p className='text-2xl text-center m-1 font-bold'>{userData.home}</p>
+        </motion.div>
+      ) : (
+        <ClipLoader size={50} color="#4fa94d" />
+      )}
     </div>
   );
 }
 
 export default QrEntry;
+
+
+
+
+
+
+
 

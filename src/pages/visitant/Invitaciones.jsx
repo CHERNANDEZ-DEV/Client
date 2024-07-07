@@ -29,13 +29,11 @@ const Invitaciones = () => {
     navigate(`/visits/qr/${id}`); // Navega a la ruta proporcionada con el id de la invitación
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).format(date);
+  const formatDateRange = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return `${new Intl.DateTimeFormat('es-ES', options).format(start)} - ${new Intl.DateTimeFormat('es-ES', options).format(end)}`;
   };
 
   const formatTime = (dateString) => {
@@ -53,7 +51,10 @@ const Invitaciones = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {invitations.map((invitation, index) => (
             invitation.dates.map((date, dateIndex) => (
-              <div key={`${index}-${dateIndex}`} className={`w-full max-w-md p-6 bg-yellow-100 shadow-md rounded-lg`}>
+              <div 
+                key={`${index}-${dateIndex}`} 
+                className={`w-full max-w-md p-6 ${invitation.unique_invitation ? '' : 'bg-yellow-100'} shadow-md rounded-lg`}
+              >
                 <div className="bg-white shadow-md rounded-lg p-4 border">
                   <div className="mb-4">
                     <label className="block text-black text-sm font-bold font-roboto_mono mb-2" htmlFor={`anfitrion-${index}`}>
@@ -75,7 +76,7 @@ const Invitaciones = () => {
                       className="font-roboto_mono shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id={`fecha-${index}`}
                       type="text"
-                      value={formatDate(date.start_datetime)}
+                      value={formatDateRange(date.start_datetime, date.end_datetime)}
                       readOnly
                     />
                   </div>

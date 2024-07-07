@@ -47,6 +47,23 @@ const Invitaciones = () => {
     return false;
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(date);
+  };
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="mb-6 text-3xl font-bold font-roboto_mono text-azul-claro">Mis invitaciones</h1>
@@ -78,8 +95,8 @@ const Invitaciones = () => {
                       id={`fecha-${index}`}
                       type="text"
                       value={isSingleDay
-                        ? (invitation.dates[0].start_datetime.split('T')[0] || 'N/A')
-                        : `${invitation.dates[0].start_datetime.split('T')[0]} a ${invitation.dates[invitation.dates.length - 1].end_datetime.split('T')[0]}`}
+                        ? (formatDate(invitation.dates[0].start_datetime) || 'N/A')
+                        : `${formatDate(invitation.dates[0].start_datetime)} a ${formatDate(invitation.dates[invitation.dates.length - 1].end_datetime)}`}
                       readOnly
                     />
                   </div>
@@ -92,8 +109,8 @@ const Invitaciones = () => {
                       id={`hora-${index}`}
                       type="text"
                       value={isSingleDay
-                        ? (invitation.dates[0].start_datetime.split('T')[1] || 'N/A')
-                        : `${invitation.dates[0].start_datetime.split('T')[1]} a ${invitation.dates[invitation.dates.length - 1].end_datetime.split('T')[1]}`}
+                        ? (formatTime(invitation.dates[0].start_datetime) || 'N/A')
+                        : `${formatTime(invitation.dates[0].start_datetime)} a ${formatTime(invitation.dates[invitation.dates.length - 1].end_datetime)}`}
                       readOnly
                     />
                   </div>
@@ -117,4 +134,3 @@ const Invitaciones = () => {
 };
 
 export default Invitaciones;
-

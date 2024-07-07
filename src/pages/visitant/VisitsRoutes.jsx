@@ -19,7 +19,7 @@ const VisitsRoutes = () => {
                 <Route path='home' element={<ProfileV />} />
                 <Route path='historial' element={<Historial />} />
                 <Route path='invitaciones' element={<Invitaciones />} />
-                <Route path='/qr' element={<GenerateQR />} />
+                <Route path='/qr/:id' element={<GenerateQR />} />
                 <Route path='/' element={<Navigate to='home' />} />
             </Routes>
         </>

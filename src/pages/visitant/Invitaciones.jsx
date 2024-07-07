@@ -34,8 +34,8 @@ const Invitaciones = () => {
     fetchInvitations();
   }, []);
 
-  const handleButtonClick = (path) => {
-    navigate(path); // Navega a la ruta proporcionada
+  const handleButtonClick = (id) => {
+    navigate(`/visits/qr/${id}`); // Navega a la ruta proporcionada con el id de la invitación
   };
 
   const isSingleDayInvitation = (dates) => {
@@ -118,7 +118,7 @@ const Invitaciones = () => {
                     <button
                       className="bg-amarillo-principal hover:bg-yellow-600 text-white font-roboto_mono font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       type="button"
-                      onClick={() => handleButtonClick('/visits/qr')}
+                      onClick={() => handleButtonClick(invitation.id)} // Pasa el id de la invitación
                     >
                       Validar
                     </button>

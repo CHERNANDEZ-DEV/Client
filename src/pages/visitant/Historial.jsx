@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { getInvitationInfo } from '../../services/Invitado/invitadoService';
 
 const Historial = () => {
   const [invitations, setInvitations] = useState([]);
 
-  // Función simulada para obtener datos desde una base de datos
   useEffect(() => {
-    // Reemplaza esto con tu lógica de obtención de datos
     const fetchData = async () => {
-      const data = await new Promise((resolve) =>
-        setTimeout(() =>
-          resolve([
-            { host: 'Peter Parker', date: '27/04/2024', time: '1:00 pm' },
-            { host: 'Natasha Romanoff', date: '27/04/2024', time: '10:00 pm' },
-            { host: 'Tony Stark', date: '27/04/2024', time: '8:00 am' },
-            { host: 'Bruce Banner', date: '27/04/2024', time: '1:00 pm' },
-            { host: 'Wanda Maximoff', date: '27/04/2024', time: '10:00 pm' },
-            { host: 'Steve Rogers', date: '27/04/2024', time: '8:00 am' },
-            { host: 'Bucky Barnes', date: '27/04/2024', time: '1:00 pm' },
-            { host: 'Thor Odinson', date: '27/04/2024', time: '10:00 pm' },
-            { host: 'Jane Foster', date: '27/04/2024', time: '8:00 am' },
-          
-          ]), 1000)
-      );
-      setInvitations(data);
+      try {
+        const data = await getInvitationInfo();
+        const formattedData = data.map(invitation => ({
+          host: invitation.name,
+          date: invitation.arrivalTime.split('T')[0],
+          time: invitation.arrivalTime.split('T')[1].split('.')[0] // Para remover la parte de los milisegundos
+        }));
+        setInvitations(formattedData);
+      } catch (error) {
+        console.error('Error fetching invitation info:', error);
+      }
     };
 
     fetchData();
@@ -30,8 +24,7 @@ const Historial = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-
-      <h1 className="mb-6 text-center text-2xl md:text-2xl lg:text-4xl  font-bold font-roboto_mono text-azul-claro">Historial de invitaciones</h1>
+      <h1 className="mb-6 text-center text-2xl md:text-2xl lg:text-4xl font-bold font-roboto_mono text-azul-claro">Historial de invitaciones</h1>
       <div className="overflow-y-auto w-full max-w-4xl max-h-96">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>

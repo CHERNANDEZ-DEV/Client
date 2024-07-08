@@ -27,14 +27,7 @@ export const getAllHomes = async () => {
   }
 };
 
-export const checkHomeExists = async (numHome) => {
-  try {
-    const response = await axiosInstance.get(`/home/exists/${numHome}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 
 
 export const getResidentsByHome = async (numHome) => {

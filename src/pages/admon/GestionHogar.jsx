@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Table from '../../components/Table';
-import { getResidentsByHome, changeUserRole } from '../../services/homeService';
+import { getResidentsByHome, changeUserRole } from '../../services/homeService.js';
+import ClipLoader from 'react-spinners/ClipLoader'; // Importar el spinner
 
 const GestionHogar = () => {
   const { houseNumber } = useParams();
   const [residents, setResidents] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado para el spinner
 
   useEffect(() => {
     fetchResidents();
@@ -13,12 +15,14 @@ const GestionHogar = () => {
 
   const fetchResidents = async () => {
     try {
+      setLoading(true); // Inicia el spinner
       const data = await getResidentsByHome(houseNumber);
-      const filteredResidents = data.filter(resident => resident.role === 'RSDT' || resident.role === 'RSNR');
-      setResidents(Array.isArray(filteredResidents) ? filteredResidents : []);
+      setResidents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching residents:", error);
       setResidents([]);
+    } finally {
+      setLoading(false); // Detiene el spinner
     }
   };
 
@@ -36,10 +40,13 @@ const GestionHogar = () => {
     }
 
     try {
+      setLoading(true); // Inicia el spinner al cambiar el rol
       await changeUserRole(userId, newRole, houseNumber);
       fetchResidents();
     } catch (error) {
       console.error("Error changing user role:", error);
+    } finally {
+      setLoading(false); // Detiene el spinner
     }
   };
 
@@ -55,7 +62,7 @@ const GestionHogar = () => {
           className="bg-amarillo-principal text-black py-2 px-4 rounded-md font-roboto_mono hover:bg-yellow-600 transition duration-300"
           onClick={() => handleRoleChange(row.original.code, row.original.role)}
         >
-          Cambiar Rol
+          Eliminar Encargado
         </button>
       )
     }
@@ -67,10 +74,16 @@ const GestionHogar = () => {
         Gestión de residentes para la casa {houseNumber}
       </h1>
       
-      <Table 
-        columnas={columnas} 
-        datos={residents} 
-      />
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <ClipLoader color={"#F8BD0D"} loading={loading} size={50} />
+        </div>
+      ) : (
+        <Table 
+          columnas={columnas} 
+          datos={residents} 
+        />
+      )}
     </div>
   );
 };

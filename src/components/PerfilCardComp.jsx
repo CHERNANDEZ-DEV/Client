@@ -17,7 +17,7 @@ const PerfilCardComp = () => {
                 const profile = await getUserProfile();
                 setUser(profile);
                 setUsername(profile.name);
-                setDui(profile.dui);
+                setDui(profile.dui || '00000000-0'); // Set default DUI if none is assigned
                 const picture = localStorage.getItem("picture") || profile.pictureurl;
                 if (picture) {
                     setUserImage(picture);
@@ -43,7 +43,7 @@ const PerfilCardComp = () => {
             const profile = await getUserProfile(); // Refresca los datos del perfil
             setUser(profile);
             setUsername(profile.name);
-            setDui(profile.dui);
+            setDui(profile.dui || '00000000-0'); // Set default DUI if none is assigned
             const picture = localStorage.getItem("picture") || profile.pictureurl;
             if (picture) {
                 setUserImage(picture);
@@ -91,7 +91,9 @@ const PerfilCardComp = () => {
                     <div className="flex flex-col items-center w-full">
                         <p className='text-center text-3xl mb-2'>{username}</p>
                         <p className='text-center text-base sm:text-2xl mb-2'>{user.email}</p>
-                        <p className='text-center text-base sm:text-2xl mb-2'>{dui}</p>
+                        <p className='text-center text-base sm:text-2xl mb-2'>
+                            <span className="font-bold">DUI: </span>{dui}
+                        </p>
                         {numHome && <p className='text-center text-2xl mb-2'>{numHome}</p>}
                         <button
                             className='bg-amarillo-principal text-black py-2 px-4 rounded-md font-roboto_mono mt-4'

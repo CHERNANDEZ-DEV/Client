@@ -28,7 +28,7 @@ axios.interceptors.request.use(
 
 
   
-const API_URL = 'http://localhost:8080/auth';
+const API_URL = 'https://securityflow.onrender.com/auth';
 
 const checkUserExists = async (identifier) => {
   try {

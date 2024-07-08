@@ -1,7 +1,7 @@
 // src/services/invitationService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/invitation'; // Cambia esto por la URL de tu backend
+const API_URL = 'https://securityflow.onrender.com/invitation'; // Cambia esto por la URL de tu backend
 
 export const createUniqueInvitation = (invitationData) => {
     return axios.post(`${API_URL}/invitation/add/unique`, invitationData);

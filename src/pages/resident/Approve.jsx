@@ -9,7 +9,7 @@ const Approve = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const profileResponse = await axios.get('http://localhost:8080/user/profile', {
+        const profileResponse = await axios.get('https://securityflow.onrender.com/user/profile', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
@@ -30,7 +30,7 @@ const Approve = () => {
 
     const fetchSolicitudes = async (home) => {
       try {
-        const solicitudesResponse = await axios.get(`http://localhost:8080/invitation/get/requests/${home}`, {
+        const solicitudesResponse = await axios.get(`https://securityflow.onrender.com/invitation/get/requests/${home}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
@@ -52,7 +52,7 @@ const Approve = () => {
 
   const handleAccept = async (invitationId) => {
     try {
-      const response = await axios.post(`http://localhost:8080/invitation/aprove/${invitationId}`, {}, {
+      const response = await axios.post(`https://securityflow.onrender.com/invitation/aprove/${invitationId}`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
@@ -69,7 +69,7 @@ const Approve = () => {
 
   const handleReject = async (invitationId) => {
     try {
-      const response = await axios.post(`http://localhost:8080/invitation/deactivate/${invitationId}`, {}, {
+      const response = await axios.post(`https://securityflow.onrender.com/invitation/deactivate/${invitationId}`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },

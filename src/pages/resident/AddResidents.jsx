@@ -33,7 +33,7 @@ const AddResidents = () => {
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const response = await axios.post('http://localhost:8080/home/assign/normal', {
+                const response = await axios.post('https://securityflow.onrender.com/home/assign/normal', {
                     identifier: formValues.email,
                     num_home: numHome
                 }, {
@@ -73,7 +73,7 @@ const AddResidents = () => {
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                await axios.post('http://localhost:8080/auth/user-role', {
+                await axios.post('https://securityflow.onrender.com/auth/user-role', {
                     identifier: email,
                     role_name: "VSTT"  // Rol a ser asignado como visitante
                 }, {
@@ -110,7 +110,7 @@ const AddResidents = () => {
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const userProfileResponse = await axios.get('http://localhost:8080/user/profile', {
+                const userProfileResponse = await axios.get('https://securityflow.onrender.com/user/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -119,7 +119,7 @@ const AddResidents = () => {
                 setNumHome(userProfile.home);
 
                 if (userProfile.home) {
-                    const residentsResponse = await axios.get(`http://localhost:8080/home/residents?numHome=${userProfile.home}`, {
+                    const residentsResponse = await axios.get(`https://securityflow.onrender.com/home/residents?numHome=${userProfile.home}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

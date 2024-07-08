@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { getToken } from '../authService';
 
-const BASE_URL = 'http://localhost:8080/invitation';
+const BASE_URL = 'https://securityflow.onrender.com/invitation';
 const GET_INVITATIONS_URL = `${BASE_URL}/get/invitations`;
 const GET_INVITATIONS_INFO_URL = `${BASE_URL}/get/invitations-info`;
 

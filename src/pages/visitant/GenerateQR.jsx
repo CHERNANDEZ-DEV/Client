@@ -24,7 +24,7 @@ const QrEntry = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:8080/qr/generate/${id}`, {
+            const response = await axios.get(`https://securityflow.onrender.com/qr/generate/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -47,7 +47,7 @@ const QrEntry = () => {
         }
 
         try {
-            const response = await axios.get('http://localhost:8080/user/profile', {
+            const response = await axios.get('https://securityflow.onrender.com/user/profile', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

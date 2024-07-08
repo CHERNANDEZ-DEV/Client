@@ -45,7 +45,7 @@ const Login = () => {
                 } else {
                     const registerInfo = {
                         email: userInfo.email,
-                        username: userInfo.email, // Usa el email como username
+                        username: userInfo.name, // Usa el email como username
                     };
                     await registerUser(registerInfo);
                     backendResponse = await loginUser({ identifier: userInfo.email });

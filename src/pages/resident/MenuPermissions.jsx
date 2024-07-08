@@ -26,7 +26,7 @@ const MenuPermissions = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/user/profile', {
+                const response = await fetch('https://securityflow.onrender.com/user/profile', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -63,7 +63,7 @@ const MenuPermissions = () => {
                 }
 
                 try {
-                    const response = await fetch(`http://localhost:8080/invitation/get/invitations/${home}`, {
+                    const response = await fetch(`https://securityflow.onrender.com/invitation/get/invitations/${home}`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -106,7 +106,7 @@ const MenuPermissions = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8080/invitation/deactivate/${invitationId}`, {}, {
+            const response = await axios.post(`https://securityflow.onrender.com/invitation/deactivate/${invitationId}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

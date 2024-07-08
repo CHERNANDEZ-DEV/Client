@@ -35,9 +35,9 @@ export const removeGuardRole = async (userId) => {
 
 export const getUserProfile = async () => {
     try {
-      const response = await axiosInstance.get('/user/profile');
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+        const response = await axiosInstance.get('/user/profile');
+        return response.data;
+        } catch (error) {
+        throw error;
+        }
+    };

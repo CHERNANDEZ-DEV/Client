@@ -24,7 +24,7 @@ const UPermission = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:8080/user/profile', {
+        const response = await fetch('https://securityflow.onrender.com/user/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -86,7 +86,7 @@ const UPermission = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/invitation/add/unique', {
+      const response = await fetch('https://securityflow.onrender.com/invitation/add/unique', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

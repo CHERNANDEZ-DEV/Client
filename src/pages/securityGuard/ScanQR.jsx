@@ -13,7 +13,7 @@ const ScanQR = () => {
 
   const validateQR = async (qrValue, token) => {
     try {
-      const response = await axios.post(`http://localhost:8080/qr/validate/${qrValue}`, {}, {
+      const response = await axios.post(`https://securityflow.onrender.com/qr/validate/${qrValue}`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -35,7 +35,7 @@ const ScanQR = () => {
 
   const sendMessage = async (token) => {
     try {
-      const response = await axios.get('http://localhost:8080/mqtt/publish?message=open', {
+      const response = await axios.get('https://securityflow.onrender.com/mqtt/publish?message=open', {
         headers: {
           Authorization: `Bearer ${token}`
         }

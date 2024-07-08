@@ -19,7 +19,7 @@ const History = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/entry/by-date', {
+            const response = await axios.post('https://securityflow.onrender.com/entry/by-date', {
                 from: from,
                 to: to
             }, {

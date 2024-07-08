@@ -15,7 +15,7 @@ const ViewVisits = () => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const response = await axios.get('http://localhost:8080/user/profile', {
+        const response = await axios.get('https://securityflow.onrender.com/user/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -52,7 +52,7 @@ const ViewVisits = () => {
 
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.post('http://localhost:8080/entry/by-home', {
+      const response = await axios.post('https://securityflow.onrender.com/entry/by-home', {
         home: numHome,
         from: `${startDate}T00:00:00`,
         to: `${endDate}T00:00:00`

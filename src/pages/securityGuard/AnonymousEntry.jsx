@@ -22,7 +22,7 @@ const AnonymousEntry = () => {
     const token = localStorage.getItem('access_token'); 
 
     // Aquí se envía la petición POST a la API
-    axios.post('http://localhost:8080/entry/anon-entry', {
+    axios.post('https://securityflow.onrender.com/entry/anon-entry', {
       reason: formData.motive,
       document: formData.identifier
     }, {
@@ -61,7 +61,7 @@ const AnonymousEntry = () => {
     const token = localStorage.getItem('access_token');
 
     // Aquí se envía la petición GET a la API para enviar el mensaje
-    axios.get('http://localhost:8080/mqtt/publish?message=open', {
+    axios.get('https://securityflow.onrender.com/mqtt/publish?message=open', {
       headers: {
         Authorization: `Bearer ${token}`
       }

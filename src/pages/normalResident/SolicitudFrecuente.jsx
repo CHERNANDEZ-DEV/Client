@@ -22,7 +22,7 @@ const MPermission = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/user/profile', {
+            const response = await fetch('https://securityflow.onrender.com/user/profile', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -105,7 +105,7 @@ const MPermission = () => {
         };
 
         try {
-        const response = await fetch('http://localhost:8080/invitation/add/multiple', {
+        const response = await fetch('https://securityflow.onrender.com/invitation/add/multiple', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',

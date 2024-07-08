@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken } from './authService';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = 'https://securityflow.onrender.com';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

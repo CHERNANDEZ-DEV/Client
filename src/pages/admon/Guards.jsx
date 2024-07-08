@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import TableGuards from '../../components/TableGuards';
 import { assignGuardRole, getGuards, removeGuardRole } from '../../services/admon/guardService';
 import { usePopup } from "../../components/PopupContext";
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const Guards = () => {
     const [guards, setGuards] = useState([]);
     const [email, setEmail] = useState('');
     const { showPopup } = usePopup();
+    const [loading, setLoading] = useState(false); // Nuevo estado para el spinner
 
     useEffect(() => {
         fetchGuards();
@@ -14,17 +16,21 @@ const Guards = () => {
 
     const fetchGuards = async () => {
         try {
+            setLoading(true); // Inicia el spinner
             const data = await getGuards();
             setGuards(data);
         } catch (error) {
             console.error("Error fetching guards:", error);
             setGuards([]);
+        } finally {
+            setLoading(false); // Detiene el spinner
         }
     };
 
     const handleAddGuard = async () => {
         if (email) {
             try {
+                setLoading(true); // Inicia el spinner
                 const result = await assignGuardRole(email);
                 if (result === "Guardia ya asignado") {
                     showPopup("Usuario ya asignado como guardia.", true);
@@ -35,6 +41,8 @@ const Guards = () => {
                 setEmail('');
             } catch (error) {
                 showPopup("Error: " + (error.response ? error.response.data : error.message), false);
+            } finally {
+                setLoading(false); // Detiene el spinner
             }
         } else {
             showPopup("Ingrese correo válido.", false);
@@ -43,12 +51,15 @@ const Guards = () => {
 
     const handleRemoveRole = async (userId) => {
         try {
+            setLoading(true); // Inicia el spinner
             await removeGuardRole(userId);
             fetchGuards();
             showPopup("Guardia removido exitosamente!", true);
         } catch (error) {
             console.error("Error removing guard role:", error);
             showPopup("Error: " + (error.response ? error.response.data : error.message), false);
+        } finally {
+            setLoading(false); // Detiene el spinner
         }
     };
 
@@ -61,7 +72,7 @@ const Guards = () => {
             Cell: ({ row }) => (
                 <button
                     className="bg-red-300 py-1 px-3 rounded-md font-roboto_mono"
-                    onClick={() => handleRemoveRole(row.original.code)} // Aquí nos aseguramos de pasar el UUID correcto
+                    onClick={() => handleRemoveRole(row.original.userId)} // Aquí nos aseguramos de pasar el UUID correcto
                 >
                     Quitar rol
                 </button>
@@ -85,16 +96,21 @@ const Guards = () => {
                 <button
                     className='bg-amarillo-principal text-black m-2 w-20 py-2 rounded-md font-roboto_mono'
                     onClick={handleAddGuard}
+                    disabled={loading} // Deshabilita el botón mientras se está cargando
                 >
-                    Agregar
+                    {loading ? <ClipLoader color={"#000"} size={20} /> : 'Agregar'}
                 </button>
             </div>
             <h1 className="text-2xl font-bold text-center text-azul-principal m-3 font-roboto_mono mt-5 mb-1">Lista de vigilantes</h1>
-            <TableGuards
-                columnas={columnas}
-                datos={guards}
-                handleEliminar={handleRemoveRole}
-            />
+            {loading ? (
+                <ClipLoader color={"#F8BD0D"} loading={loading} size={50} />
+            ) : (
+                <TableGuards
+                    columnas={columnas}
+                    datos={guards}
+                    handleEliminar={handleRemoveRole}
+                />
+            )}
         </div>
     );
 };

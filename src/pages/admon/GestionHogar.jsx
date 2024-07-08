@@ -58,12 +58,14 @@ const GestionHogar = () => {
     {
       Header: 'Acciones',
       Cell: ({ row }) => (
-        <button
-          className="bg-amarillo-principal text-black py-2 px-4 rounded-md font-roboto_mono hover:bg-yellow-600 transition duration-300"
-          onClick={() => handleRoleChange(row.original.code, row.original.role)}
-        >
-          Eliminar Encargado
-        </button>
+        row.original.role === 'Residente encargado' ? (
+          <button
+            className="bg-amarillo-principal text-black py-2 px-4 rounded-md font-roboto_mono hover:bg-yellow-600 transition duration-300"
+            onClick={() => handleRoleChange(row.original.code, row.original.role)}
+          >
+            Eliminar Encargado
+          </button>
+        ) : null
       )
     }
   ];

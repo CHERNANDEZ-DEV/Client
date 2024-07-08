@@ -8,7 +8,6 @@ const PerfilCardComp = () => {
     const [userImage, setUserImage] = useState(defaultImage);
     const [username, setUsername] = useState('');
     const [dui, setDui] = useState('');
-    const [numHome, setHouseNumber] = useState('Casa #No asignado');
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
@@ -21,11 +20,6 @@ const PerfilCardComp = () => {
                 const picture = localStorage.getItem("picture") || profile.pictureurl;
                 if (picture) {
                     setUserImage(picture);
-                }
-                if (profile.roles.includes("Residente encargado") || profile.roles.includes("Residente normal")) {
-                    setHouseNumber(profile.home ? `Casa #${profile.home}` : 'Casa #No asignado');
-                } else {
-                    setHouseNumber(null);
                 }
             } catch (error) {
                 console.error("Error fetching user profile:", error);
@@ -47,11 +41,6 @@ const PerfilCardComp = () => {
             const picture = localStorage.getItem("picture") || profile.pictureurl;
             if (picture) {
                 setUserImage(picture);
-            }
-            if (profile.roles.includes("Residente encargado") || profile.roles.includes("Residente normal")) {
-                setHouseNumber(profile.home ? `Casa #${profile.home}` : 'Casa #No asignado');
-            } else {
-                setHouseNumber(null);
             }
         } catch (error) {
             console.error("Error updating profile:", error);
@@ -94,7 +83,6 @@ const PerfilCardComp = () => {
                         <p className='text-center text-base sm:text-2xl mb-2'>
                             <span className="font-bold">DUI: </span>{dui}
                         </p>
-                        {numHome && <p className='text-center text-2xl mb-2'>{numHome}</p>}
                         <button
                             className='bg-amarillo-principal text-black py-2 px-4 rounded-md font-roboto_mono mt-4'
                             onClick={() => setIsEditing(true)}

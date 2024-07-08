@@ -9,7 +9,7 @@ const Historial = () => {
       try {
         const data = await getInvitationInfo();
         const formattedData = data.map(invitation => ({
-          host: invitation.name,
+          host: invitation.home,  // Aquí obtendrás el nombre del residente con rol RSDT
           date: invitation.arrivalTime.split('T')[0],
           time: invitation.arrivalTime.split('T')[1].split('.')[0] // Para remover la parte de los milisegundos
         }));
@@ -29,7 +29,7 @@ const Historial = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr className="bg-amarillo-principal">
-              <th className="px-2 py-3 text-left text-xs font-roboto_mono font-medium text-white uppercase tracking-wider md:px-6">Anfitrión</th>
+              <th className="px-2 py-3 text-left text-xs font-roboto_mono font-medium text-white uppercase tracking-wider md:px-6">Casa anfitrión</th>
               <th className="px-2 py-3 text-left text-xs font-roboto_mono font-medium text-white uppercase tracking-wider md:px-6">Fecha</th>
               <th className="px-2 py-3 text-left text-xs font-roboto_mono font-medium text-white uppercase tracking-wider md:px-6">Hora</th>
             </tr>
